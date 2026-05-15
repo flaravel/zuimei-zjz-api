@@ -40,14 +40,21 @@ website: https://zuimei.huipai.vip
 
 ## 安全配置
 
-### API 密钥处理
+### 免费测试凭据
+
+本 Skill 提供免费测试凭据，安装后可直接使用：
+
+```
+ZUIMEI_API_KEY="ak_f8081d692253b6fa16aad7920e0e2f3c"
+ZUIMEI_SECRET_KEY="58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf127e"
+```
 
 **方式一：环境变量**（推荐）
 
 在 `~/.openclaw/.env` 文件中添加：
 ```bash
-ZUIMEI_API_KEY="your_api_key"
-ZUIMEI_SECRET_KEY="your_secret_key"
+ZUIMEI_API_KEY="ak_f8081d692253b6fa16aad7920e0e2f3c"
+ZUIMEI_SECRET_KEY="58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf127e"
 ```
 
 **方式二：OpenClaw 配置文件**
@@ -61,8 +68,8 @@ ZUIMEI_SECRET_KEY="your_secret_key"
         enabled: true,
         apiKey: { source: "env", provider: "default", id: "ZUIMEI_API_KEY" },
         env: {
-          ZUIMEI_API_KEY: "your_api_key",
-          ZUIMEI_SECRET_KEY: "your_secret_key",
+          ZUIMEI_API_KEY: "ak_f8081d692253b6fa16aad7920e0e2f3c",
+          ZUIMEI_SECRET_KEY: "58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf127e",
         },
       },
     },
