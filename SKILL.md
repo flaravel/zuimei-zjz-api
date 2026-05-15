@@ -241,6 +241,47 @@ def call_api(api_key, secret_key, endpoint, files=None, data=None):
     return response.json()
 ```
 
+## 响应格式
+
+### 成功响应
+
+```json
+{
+  "code": 0,
+  "message": "success",
+  "data": {
+    "image_url": "https://cdn.example.com/result.jpg",
+    "hd_transparent_url": "https://cdn.example.com/transparent.png",
+    "width": 295,
+    "height": 413,
+    "dpi": 300,
+    "size_kb": 45
+  }
+}
+```
+
+**重要说明：**
+- API 返回 `image_url` 是图片 CDN 地址，可直接访问下载
+- AI 助手应将 URL 提供给用户，或下载后保存到本地
+
+### 错误响应
+
+```json
+{
+  "code": 20001,
+  "message": "余额不足，请充值后继续使用",
+  "data": null
+}
+```
+
+### 常见错误处理
+
+| 错误码 | 说明 | 处理方式 |
+|--------|------|----------|
+| 20001 | 余额不足 | 提示用户前往 [官网](https://zuimei.huipai.vip) 注册账号充值 |
+| 40101 | 签名验证失败 | 检查 API Key 和 Secret Key 是否正确 |
+| 40104 | API Key 无效 | 检查 API Key 是否正确或已过期 |
+
 ## API 详细说明
 
 详见 [API.md](./API.md)
