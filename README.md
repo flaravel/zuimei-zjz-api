@@ -101,4 +101,3 @@ MIT
 ## 联系方式
 
 - 官网：https://zuimei.huipai.vip
-- API 文档：https://idphoto.huipai.vip/docs
