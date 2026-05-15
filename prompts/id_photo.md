@@ -29,6 +29,6 @@ result = client.id_photo(
     width=295,
     height=413,
     background_color="#438EDB",
-    beautify=True
+    beautify=False  # 默认不开启美颜
 )
 ```

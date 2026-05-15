@@ -42,10 +42,32 @@ website: https://zuimei.huipai.vip
 
 ### API 密钥处理
 
-**环境变量**（推荐）：
+**方式一：环境变量**（推荐）
+
+在 `~/.openclaw/.env` 文件中添加：
 ```bash
-export ZUIMEI_API_KEY="your_api_key"
-export ZUIMEI_SECRET_KEY="your_secret_key"
+ZUIMEI_API_KEY="your_api_key"
+ZUIMEI_SECRET_KEY="your_secret_key"
+```
+
+**方式二：OpenClaw 配置文件**
+
+在 `~/.openclaw/openclaw.json` 中配置：
+```json5
+{
+  skills: {
+    entries: {
+      "zuimei-zjz-api": {
+        enabled: true,
+        apiKey: { source: "env", provider: "default", id: "ZUIMEI_API_KEY" },
+        env: {
+          ZUIMEI_API_KEY: "your_api_key",
+          ZUIMEI_SECRET_KEY: "your_secret_key",
+        },
+      },
+    },
+  },
+}
 ```
 
 **安全要求**：
