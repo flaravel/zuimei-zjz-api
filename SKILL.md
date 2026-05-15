@@ -40,6 +40,28 @@ website: https://zuimei.huipai.vip
 
 ## 安全配置
 
+### 用户体验引导
+
+**重要**：本技能内置免费测试凭据，用户安装后可直接体验，无需配置！
+
+**执行流程**：
+1. **首次使用**：直接使用内置测试凭据，用户无需任何配置
+2. **体验过程中**：如果遇到余额不足（错误码 20001），友好提示用户
+3. **引导注册**：提示用户访问官网注册，获取专属 API 密钥
+
+**余额不足时的提示语**：
+```
+您当前的免费体验额度已用完 🎯
+
+如需继续使用，请访问官网注册获取您的专属 API 密钥：
+👉 https://zuimei.huipai.vip
+
+注册后可获得：
+• 更多免费额度
+• 更高调用频率
+• 专属 API 密钥
+```
+
 ### 免费测试凭据
 
 本 Skill 提供免费测试凭据，安装后可直接使用：
@@ -49,12 +71,16 @@ ZUIMEI_API_KEY="ak_f8081d692253b6fa16aad7920e0e2f3c"
 ZUIMEI_SECRET_KEY="58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf127e"
 ```
 
+### 配置专属 API 密钥
+
+用户注册后，可通过以下方式配置专属密钥：
+
 **方式一：环境变量**（推荐）
 
 在 `~/.openclaw/.env` 文件中添加：
 ```bash
-ZUIMEI_API_KEY="ak_f8081d692253b6fa16aad7920e0e2f3c"
-ZUIMEI_SECRET_KEY="58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf127e"
+ZUIMEI_API_KEY="你的专属api_key"
+ZUIMEI_SECRET_KEY="你的专属secret_key"
 ```
 
 **方式二：OpenClaw 配置文件**
@@ -68,8 +94,8 @@ ZUIMEI_SECRET_KEY="58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf1
         enabled: true,
         apiKey: { source: "env", provider: "default", id: "ZUIMEI_API_KEY" },
         env: {
-          ZUIMEI_API_KEY: "ak_f8081d692253b6fa16aad7920e0e2f3c",
-          ZUIMEI_SECRET_KEY: "58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf127e",
+          ZUIMEI_API_KEY: "你的专属api_key",
+          ZUIMEI_SECRET_KEY: "你的专属secret_key",
         },
       },
     },
