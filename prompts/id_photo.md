@@ -101,9 +101,35 @@ background_color = "#438EDB"
 - 蓝底：`#438EDB`
 - 红底：`#FF0000`（结婚照常用）
 
+## 📋 API 参数限制
+
+| 参数 | 类型 | 范围/可选值 | 默认值 | 说明 |
+|------|------|-------------|--------|------|
+| width | int | **50-2000** | 295 | 输出宽度（像素） |
+| height | int | **50-2000** | 413 | 输出高度（像素） |
+| background_color | string | `#RRGGBB` 或渐变或多色 | #FFFFFF | 背景颜色 |
+| dpi | int | 72-1200 | 300 | 图片 DPI |
+| max_size_kb | int | > 0 | - | 文件大小限制（KB） |
+| return_hd_transparent | bool | true/false | false | 返回高清透明 PNG |
+| beautify_flag | bool | true/false | false | 启用美颜 |
+| verify | bool | true/false | false | 完整照片校验 |
+| subject_mode | string | **`single` / `couple`** | single | 单人/双人结婚照 |
+| output_format | string | `jpeg` / `png` / `webp` | jpeg | 输出格式 |
+
+### 背景色格式
+
+| 格式 | 示例 | 说明 |
+|------|------|------|
+| 纯色 | `#FFFFFF` | 白色 |
+| 纯色 | `#438EDB` | 蓝色（证件照常用） |
+| 纯色 | `#FF0000` | 红色（结婚照常用） |
+| 上下渐变 | `#438EDB,updown` | 从蓝渐变到白 |
+| 中心渐变 | `#438EDB,center` | 从中心蓝向四周渐变 |
+| 多背景色 | `#FFFFFF;#438EDB;#FF0000` | 生成3张图（最多5个） |
+
 ## 可选参数
 
-- `return_hd_transparent`: 是否返回高清透明底图（默认 True）
+- `return_hd_transparent`: 是否返回高清透明底图（默认 False）
 - `beautify_flag`: 是否开启美颜（默认 False）
 - `subject_mode`: 主体模式，`single`=单人，`couple`=双人结婚照
 

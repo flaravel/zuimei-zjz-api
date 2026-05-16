@@ -284,6 +284,85 @@ ZUIMEI_SECRET_KEY="你的专属secret_key"
 | 排版照 | `/api/v1/photo/layout` | 生成打印排版照 |
 | 图片编辑 | `/api/v1/photo/edit` | 尺寸调整、格式转换 |
 
+## 📋 API 参数限制速查表
+
+### 1. 证件照 `/api/v1/photo/id-photo`
+
+| 参数 | 类型 | 范围/可选值 | 默认值 | 说明 |
+|------|------|-------------|--------|------|
+| width | int | 50-2000 | 295 | 输出宽度（像素） |
+| height | int | 50-2000 | 413 | 输出高度（像素） |
+| background_color | string | `#RRGGBB` 或 `#颜色,updown` 或 `#颜色,center` 或 `#色1;#色2;...`（最多5个） | #FFFFFF | 背景颜色 |
+| dpi | int | 72-1200 | 300 | 图片 DPI |
+| max_size_kb | int | > 0 | - | 文件大小限制（KB） |
+| return_hd_transparent | bool | true/false | false | 返回高清透明 PNG |
+| beautify_flag | bool | true/false | false | 启用美颜 |
+| verify | bool | true/false | false | 完整照片校验 |
+| subject_mode | string | `single` / `couple` | single | 单人/双人结婚照 |
+| output_format | string | `jpeg` / `png` / `webp` | jpeg | 输出格式 |
+
+### 2. 智能抠图 `/api/v1/segment/portrait`
+
+| 参数 | 类型 | 范围/可选值 | 默认值 | 说明 |
+|------|------|-------------|--------|------|
+| image | file | JPG/PNG/WebP/HEIC | - | 图片文件 |
+| quality | string | `hd-pro` | hd-pro | 分割质量 |
+
+### 3. 换背景色 `/api/v1/segment/background`
+
+| 参数 | 类型 | 范围/可选值 | 默认值 | 说明 |
+|------|------|-------------|--------|------|
+| background_color | string | `#RRGGBB` 或 `#颜色,updown` 或 `#颜色,center` 或 `#色1;#色2;...`（最多5个） | #FFFFFF | 背景颜色 |
+| quality | string | `hd-pro` 或不传 | - | 传值则扣费（重新分割），不传则免费（需透明 PNG） |
+| dpi | int | 72-1200 | 300 | 输出 DPI |
+| max_size_kb | int | > 0 | - | 文件大小限制（KB） |
+| output_format | string | `jpeg` / `png` / `webp` | jpeg | 输出格式 |
+
+### 4. 人脸增强 `/api/v1/photo/enhance`
+
+| 参数 | 类型 | 范围/可选值 | 默认值 | 说明 |
+|------|------|-------------|--------|------|
+| fidelity | float | 0.0-1.0 | 0.3 | 保真度（越小增强越强，可能失真） |
+| use_sr | bool | true/false | false | 启用超分辨率放大 |
+| sr_scale | int | `2` / `4` | 2 | 放大倍数 |
+| restore_size | bool | true/false | true | 放大后缩回原尺寸（提升清晰度） |
+
+### 5. 排版照 `/api/v1/photo/layout`
+
+| 参数 | 类型 | 范围/可选值 | 默认值 | 说明 |
+|------|------|-------------|--------|------|
+| layout_type | string | `6inch` / `5inch` / `A4` / `3R` / `4R` | 6inch | 排版类型 |
+| crop_line | bool | true/false | false | 添加裁剪线 |
+| watermark | string | 最多6字符 | - | 自定义水印 |
+
+**排版类型对应尺寸：**
+| layout_type | 画布尺寸 (px) | 毫米 |
+|-------------|--------------|------|
+| 6inch / 4R | 1795 x 1205 | 152mm x 102mm |
+| 5inch / 3R | 1500 x 1051 | 127mm x 89mm |
+| A4 | 3508 x 2479 | 297mm x 210mm |
+
+### 6. 图片编辑 `/api/v1/photo/edit`
+
+| 参数 | 类型 | 范围/可选值 | 默认值 | 说明 |
+|------|------|-------------|--------|------|
+| width | int | > 0 | 原图宽度 | 目标宽度 |
+| height | int | > 0 | 原图高度 | 目标高度 |
+| dpi | int | 72-1200 | 300 | 图片 DPI |
+| max_size_kb | int | > 0 | - | 文件大小限制（KB） |
+| output_format | string | `jpeg` / `png` / `webp` | jpeg | 输出格式 |
+
+### 🎨 背景色格式详解
+
+| 格式 | 示例 | 说明 |
+|------|------|------|
+| 纯色 | `#FFFFFF` | 白色背景 |
+| 纯色 | `#438EDB` | 蓝色背景（证件照常用） |
+| 纯色 | `#FF0000` | 红色背景（结婚照常用） |
+| 上下渐变 | `#438EDB,updown` | 从蓝色渐变到白色 |
+| 中心渐变 | `#438EDB,center` | 从中心蓝色向四周渐变到白色 |
+| 多背景色 | `#FFFFFF;#438EDB;#FF0000` | 生成3张不同背景色图片（最多5个） |
+
 ## 使用场景
 
 ### 1. 证件照制作
