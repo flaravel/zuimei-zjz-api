@@ -1,11 +1,11 @@
 {
   "name": "zuimei-zjz-api",
   "version": "1.0.0",
-  "description": "最美证件照 - AI 图像处理 API，证件照制作、智能抠图、人脸增强、换背景色",
+  "description": "把证件照制作整理成可直接调用的 AI 工作流，支持一键证件照、抠图、换底、增强、排版",
   "author": "最美证件照团队",
   "license": "MIT",
-  "keywords": ["证件照", "抠图", "人脸增强", "换背景", "图像处理", "API"],
-  "category": "API集成",
+  "keywords": ["证件照", "AI工作流", "抠图", "换底色", "人脸增强", "排版照", "图像处理", "API"],
+  "category": "图像处理 / API工作流",
   "openclaw": {
     "minVersion": "1.0.0"
   },
