@@ -68,12 +68,23 @@ clawhub install --git https://github.com/flaravel/zuimei-zjz-api.git
 
 ## 快速开始
 
-### 环境变量
+### 通用环境变量配置
 
 ```bash
 export ZUIMEI_API_KEY="your_api_key"
 export ZUIMEI_SECRET_KEY="your_secret_key"
 ```
+
+这是一种通用配置方式，适用于本地终端、服务器、容器、CI/CD 和大多数运行环境。
+
+### OpenClaw 中使用
+
+如果是在 OpenClaw 中使用，也可以把同样的密钥放进：
+
+- `~/.openclaw/.env`
+- `~/.openclaw/openclaw.json`
+
+Skill 文档里提供了对应示例。
 
 ### Python 示例
 

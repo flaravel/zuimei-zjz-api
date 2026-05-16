@@ -254,17 +254,27 @@ ZUIMEI_SECRET_KEY="58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf1
 
 ### 配置专属 API 密钥
 
-用户注册后，可通过以下方式配置专属密钥：
+用户注册后，可通过以下方式配置专属密钥。
 
-**方式一：环境变量**（推荐）
+**方式一：通用环境变量**（推荐，适用于大多数运行环境）
 
-在 `~/.openclaw/.env` 文件中添加：
+在当前终端、系统环境变量、CI/CD、容器环境或 `.env` 文件中设置：
+```bash
+export ZUIMEI_API_KEY="你的专属api_key"
+export ZUIMEI_SECRET_KEY="你的专属secret_key"
+```
+
+如果是 Python、Node.js、脚本工具、工作流平台或其他通用运行环境，优先使用这一种方式。
+
+**方式二：OpenClaw 专用环境变量**
+
+如果你是在 OpenClaw 中使用，可在 `~/.openclaw/.env` 文件中添加：
 ```bash
 ZUIMEI_API_KEY="你的专属api_key"
 ZUIMEI_SECRET_KEY="你的专属secret_key"
 ```
 
-**方式二：OpenClaw 配置文件**
+**方式三：OpenClaw 配置文件**（仅 OpenClaw 需要）
 
 在 `~/.openclaw/openclaw.json` 中配置：
 ```json5
@@ -283,6 +293,11 @@ ZUIMEI_SECRET_KEY="你的专属secret_key"
   },
 }
 ```
+
+**推荐理解方式**：
+
+- 通用程序 / 脚本 / CI：使用 `export ZUIMEI_API_KEY=...`
+- OpenClaw：可用 `~/.openclaw/.env` 或 `~/.openclaw/openclaw.json`
 
 **安全要求**：
 1. **密钥存储**：API 密钥应存储在环境变量或安全的密钥管理系统中，禁止硬编码
