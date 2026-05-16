@@ -36,6 +36,22 @@
 | 驾照 | 260 x 378 | `width, height = 260, 378` |
 | 身份证 | 358 x 441 | `width, height = 358, 441` |
 | 结婚照 | 413 x 579 | `width, height = 413, 579` + `subject_mode="couple"` |
+| **自定义** | 用户指定 | `width=自定义宽, height=自定义高` |
+
+### 📐 自定义尺寸
+
+当用户需要非标准尺寸时，直接设置 `width` 和 `height` 参数：
+
+```python
+# 示例：用户说"帮我生成 400x500 的蓝底证件照"
+width, height = 400, 500  # 用户指定的尺寸
+background_color = "#438EDB"
+```
+
+**API 参数说明**：
+- `width`：输出图片宽度（像素），范围 100-2000
+- `height`：输出图片高度（像素），范围 100-3000
+- `background_color`：背景颜色，格式 `#RRGGBB`
 
 **示例**：
 - 用户说"帮我生成五寸蓝底证件照" → 自动使用 `width=1050, height=1499`

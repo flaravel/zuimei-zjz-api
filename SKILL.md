@@ -99,6 +99,11 @@ def call_api(endpoint, image_path, **params):
 | 驾照 | 260 x 378 | `width=260, height=378` |
 | 身份证 | 358 x 441 | `width=358, height=441` |
 | 结婚照 | 413 x 579 | `width=413, height=579` + `subject_mode="couple"` |
+| **自定义** | 用户指定 | `width=自定义宽, height=自定义高` |
+
+**自定义尺寸**：用户可指定任意尺寸，直接设置 `width` 和 `height` 参数
+- 范围：width 100-2000，height 100-3000
+- 示例：用户说"帮我生成 400x500 的证件照" → 使用 `width=400, height=500`
 
 **示例**：
 - 用户说"帮我生成五寸蓝底证件照" → 使用 `width=1050, height=1499`
