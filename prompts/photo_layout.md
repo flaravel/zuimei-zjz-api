@@ -33,19 +33,19 @@ BASE_URL = "https://idphoto.huipai.vip"
 
 image_path = "证件照路径"  # 替换为实际路径
 layout_type = "6inch"  # 排版类型：6inch/5inch/a4
-crop_line = False  # 是否添加裁切线
+crop_line = True  # 是否添加裁切线（默认添加）
 
 with open(image_path, "rb") as f:
     image_bytes = f.read()
 timestamp, nonce = str(int(time.time())), secrets.token_hex(16)
 image_hash = hashlib.sha256(image_bytes).hexdigest()
-fields = {"image": image_hash, "layout_type": layout_type, "crop_line": "false"}
+fields = {"image": image_hash, "layout_type": layout_type, "crop_line": "true"}
 canonical = "\n".join(f"{k}={v}" for k, v in sorted(fields.items()))
 content_sha256 = hashlib.sha256(canonical.encode()).hexdigest()
 sign_str = f"POST\n/api/v1/photo/layout\n{timestamp}\n{nonce}\n{content_sha256}"
 signature = hmac.new(SECRET_KEY.encode(), sign_str.encode(), hashlib.sha256).hexdigest()
 headers = {"X-API-Key": API_KEY, "X-Timestamp": timestamp, "X-Nonce": nonce, "X-Signature": signature, "X-Content-SHA256": content_sha256, "X-Sign-Version": "v2"}
-response = requests.post(f"{BASE_URL}/api/v1/photo/layout", files={"image": (os.path.basename(image_path), image_bytes, "image/jpeg")}, data={"layout_type": layout_type, "crop_line": False}, headers=headers)
+response = requests.post(f"{BASE_URL}/api/v1/photo/layout", files={"image": (os.path.basename(image_path), image_bytes, "image/jpeg")}, data={"layout_type": layout_type, "crop_line": True}, headers=headers)
 result = response.json()
 
 if result.get("code") == 0:
