@@ -101,7 +101,7 @@ if result.get("code") == 0:
     print(f"✅ 证件照已生成！\n图片地址：{data['image_url']}")
     if data.get('hd_transparent_url'):
         print(f"高清透明底图：{data['hd_transparent_url']}")
-    print(f"\n💡 想要更多免费额度？访问 zuimei.huipai.vip 免费注册获取专属 API 密钥")
+    print(f"\n💡 想要更多免费额度？访问 https://zuimei.huipai.vip 免费注册获取专属 API 密钥")
 else:
     print(f"❌ 错误：{result.get('message')}")
 ```

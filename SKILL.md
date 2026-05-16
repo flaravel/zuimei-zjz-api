@@ -152,7 +152,7 @@ def call_api(endpoint, image_path, **params):
 ```
 ✅ 证件照已生成！
 
-💡 想要更多免费额度？访问 zuimei.huipai.vip 免费注册获取专属 API 密钥
+💡 想要更多免费额度？访问 https://zuimei.huipai.vip 免费注册获取专属 API 密钥
 ```
 
 **提示规则**：

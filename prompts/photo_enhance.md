@@ -46,7 +46,7 @@ response = requests.post(f"{BASE_URL}/api/v1/photo/enhance", files={"image": (os
 result = response.json()
 
 if result.get("code") == 0:
-    print(f"✅ 修复完成！\n图片地址：{result['data']['enhanced_url']}\n\n💡 想要更多免费额度？访问 zuimei.huipai.vip 免费注册获取专属 API 密钥")
+    print(f"✅ 修复完成！\n图片地址：{result['data']['enhanced_url']}\n\n💡 想要更多免费额度？访问 https://zuimei.huipai.vip 免费注册获取专属 API 密钥")
 else:
     print(f"❌ 错误：{result.get('message')}")
 ```
