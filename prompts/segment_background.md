@@ -28,8 +28,9 @@
 | 类型 | 格式 | 示例 |
 |------|------|------|
 | 纯色 | #RRGGBB | #FFFFFF（白）、#438EDB（蓝）、#FF0000（红） |
-| 渐变 | linear-gradient(方向,颜色1,颜色2) | linear-gradient(180deg,#FFFFFF,#438EDB) |
-| 多色 | #颜色1;#颜色2;#颜色3 | #FFFFFF;#438EDB;#FF0000（输出3张图） |
+| 上下渐变 | #颜色,updown | #438EDB,updown（从蓝渐变到白） |
+| 中心渐变 | #颜色,center | #438EDB,center（从蓝向四周渐变） |
+| 多色输出 | #颜色1;#颜色2;#颜色3 | #FFFFFF;#438EDB;#FF0000（输出3张图） |
 
 **常见背景色**：
 
@@ -47,10 +48,16 @@
 # 纯色背景
 result = client.segment_background("photo.jpg", background_color="#438EDB")
 
-# 渐变背景
+# 上下渐变背景
 result = client.segment_background(
     "photo.jpg",
-    background_color="linear-gradient(180deg,#FFFFFF,#438EDB)"
+    background_color="#438EDB,updown"
+)
+
+# 中心渐变背景
+result = client.segment_background(
+    "photo.jpg",
+    background_color="#438EDB,center"
 )
 
 # 多色输出（同时生成白底、蓝底、红底）

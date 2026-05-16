@@ -19,6 +19,15 @@ from typing import Any
 import requests
 
 
+class ZuimeiApiError(Exception):
+    """最美证件照 API 错误"""
+
+    def __init__(self, code: int, message: str):
+        self.code = code
+        self.message = message
+        super().__init__(f"[{code}] {message}")
+
+
 class ZuimeiZjzClient:
     """最美证件照 API 客户端"""
 
@@ -81,7 +90,12 @@ class ZuimeiZjzClient:
         }
 
         response = requests.post(f"{self.BASE_URL}{endpoint}", files=files, data=data, headers=headers)
-        return response.json()
+        result = response.json()
+
+        if result.get("code") != 0:
+            raise ZuimeiApiError(result.get("code", -1), result.get("message", "未知错误"))
+
+        return result
 
     def id_photo(
         self,
@@ -243,8 +257,8 @@ class ZuimeiZjzClient:
 if __name__ == "__main__":
     client = ZuimeiZjzClient()
 
-    # 一键证件照
-    result = client.id_photo("photo.jpg", width=295, height=413, background_color="#438EDB", beautify=True)
+    # 一键证件照（默认不开启美颜）
+    result = client.id_photo("photo.jpg", width=295, height=413, background_color="#438EDB")
     print("证件照:", result)
 
     # 智能抠图

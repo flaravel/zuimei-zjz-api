@@ -54,9 +54,9 @@ from python_sdk import ZuimeiZjzClient
 
 client = ZuimeiZjzClient()
 
-# 一寸证件照（蓝底+美颜）
+# 一寸证件照（蓝底，默认不开启美颜）
 result = client.id_photo("photo.jpg", width=295, height=413,
-                         background_color="#438EDB", beautify=True)
+                         background_color="#438EDB")
 
 # 智能抠图
 result = client.segment_portrait("photo.jpg")
