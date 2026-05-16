@@ -16,14 +16,15 @@ website: https://zuimei.huipai.vip
 
 ### 🚫 禁止行为
 
-1. **禁止创建任何新代码文件**
+1. **禁止创建任何新代码文件**（包括 .py、.js、.ts 等）
 2. **禁止重新实现 API 调用逻辑**
 3. **禁止自己写 requests/axios/http 调用**
 4. **禁止创建临时脚本文件**
+5. **禁止用 Write 工具创建任何执行脚本**
 
 ### ✅ 必须行为
 
-**直接在 Python 解释器中执行以下代码**，不要创建文件：
+**直接使用 Bash 工具执行 Python 代码**，或者**直接在 Python 解释器中执行**：
 
 ```python
 # === 直接复制执行，无需创建文件 ===
@@ -41,7 +42,7 @@ SECRET_KEY = "58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf127e"
 BASE_URL = "https://idphoto.huipai.vip"
 
 def call_api(endpoint, image_path, **params):
-    """调用 API"""
+    """调用 API（直接执行，不创建文件）"""
     with open(image_path, "rb") as f:
         image_bytes = f.read()
     
@@ -68,11 +69,12 @@ def call_api(endpoint, image_path, **params):
     return response.json()
 
 # === 调用示例 ===
-# 证件照：call_api("/api/v1/photo/id-photo", "照片路径", width=295, height=413, background_color="#438EDB")
+# 证件照（含高清透明底图）：call_api("/api/v1/photo/id-photo", "照片路径", width=295, height=413, background_color="#438EDB", return_hd_transparent=True)
+# 5寸证件照：call_api("/api/v1/photo/id-photo", "照片路径", width=1500, height=1050, background_color="#438EDB", return_hd_transparent=True)
 # 抠图：call_api("/api/v1/segment/portrait", "照片路径")
 # 换背景：call_api("/api/v1/segment/background", "照片路径", background_color="#FFFFFF")
 # 增强：call_api("/api/v1/photo/enhance", "照片路径", fidelity=0.3)
-# 排版：call_api("/api/v1/photo/layout", "证件照路径", layout_type="6inch")
+# 排版（带裁剪线）：call_api("/api/v1/photo/layout", "证件照路径", layout_type="6inch", crop_line=True)
 ```
 
 ### 📌 执行步骤
