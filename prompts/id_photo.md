@@ -76,7 +76,7 @@ SECRET_KEY = "58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf127e"
 BASE_URL = "https://idphoto.huipai.vip"
 
 image_path = "用户照片路径"  # 替换为实际路径
-width, height = 295, 413  # 一寸（根据上表选择）
+width, height = 295, 413  # 一寸（五寸=1050x1499，四寸=898x1205，六寸=1795x1205）
 background_color = "#438EDB"  # 蓝底
 return_hd_transparent = True  # 返回高清透明底图
 subject_mode = "single"  # single=单人, couple=结婚照

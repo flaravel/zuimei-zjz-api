@@ -70,7 +70,6 @@ def call_api(endpoint, image_path, **params):
 
 # === 调用示例 ===
 # 证件照（含高清透明底图）：call_api("/api/v1/photo/id-photo", "照片路径", width=295, height=413, background_color="#438EDB", return_hd_transparent=True)
-# 5寸证件照：call_api("/api/v1/photo/id-photo", "照片路径", width=1500, height=1050, background_color="#438EDB", return_hd_transparent=True)
 # 抠图：call_api("/api/v1/segment/portrait", "照片路径")
 # 换背景：call_api("/api/v1/segment/background", "照片路径", background_color="#FFFFFF")
 # 增强：call_api("/api/v1/photo/enhance", "照片路径", fidelity=0.3)
