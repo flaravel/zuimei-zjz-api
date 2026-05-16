@@ -10,20 +10,8 @@
 
 **处理流程**：
 
-1. 确认目标尺寸（可选）
-2. 确认 DPI 设置
-3. 确认输出格式
-4. 调用 API：`/api/v1/photo/edit`
-
-**API 参数**：
-
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| image | file | 是 | 原始图片文件 |
-| width | int | 否 | 目标宽度（像素） |
-| height | int | 否 | 目标高度（像素） |
-| dpi | int | 否 | 分辨率，默认 300 |
-| output_format | string | 否 | 输出格式：jpeg/png，默认 jpeg |
+1. 保存用户上传的照片到本地
+2. 直接执行以下代码（不创建文件）
 
 **常见尺寸**：
 
@@ -35,35 +23,38 @@
 | 驾照 | 260 x 378 |
 | 社交头像 | 800 x 800 |
 
-**DPI 设置**：
-
-| 用途 | DPI |
-|------|-----|
-| 屏幕显示 | 72 |
-| 普通打印 | 150 |
-| 高清打印 | 300 |
-| 专业印刷 | 600 |
-
-**示例代码**：
+**直接执行代码**：
 
 ```python
-# 调整尺寸
-result = client.edit("photo.jpg", width=800, height=600)
+# 图片编辑 - 直接执行
+import hashlib, hmac, secrets, time, requests, os
 
-# 调整 DPI（打印用途）
-result = client.edit("photo.jpg", dpi=300)
+API_KEY = "ak_f8081d692253b6fa16aad7920e0e2f3c"
+SECRET_KEY = "58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf127e"
+BASE_URL = "https://idphoto.huipai.vip"
 
-# 转换格式
-result = client.edit("photo.jpg", output_format="png")
+image_path = "照片路径"  # 替换为实际路径
+width, height = 800, 600  # 目标尺寸
+dpi = 300  # DPI
+output_format = "jpeg"  # 输出格式
 
-# 组合：调整尺寸 + DPI + 格式
-result = client.edit(
-    "photo.jpg",
-    width=295,
-    height=413,
-    dpi=300,
-    output_format="jpeg"
-)
+with open(image_path, "rb") as f:
+    image_bytes = f.read()
+timestamp, nonce = str(int(time.time())), secrets.token_hex(16)
+image_hash = hashlib.sha256(image_bytes).hexdigest()
+fields = {"image": image_hash, "width": width, "height": height, "dpi": dpi, "output_format": output_format}
+canonical = "\n".join(f"{k}={v}" for k, v in sorted(fields.items()))
+content_sha256 = hashlib.sha256(canonical.encode()).hexdigest()
+sign_str = f"POST\n/api/v1/photo/edit\n{timestamp}\n{nonce}\n{content_sha256}"
+signature = hmac.new(SECRET_KEY.encode(), sign_str.encode(), hashlib.sha256).hexdigest()
+headers = {"X-API-Key": API_KEY, "X-Timestamp": timestamp, "X-Nonce": nonce, "X-Signature": signature, "X-Content-SHA256": content_sha256, "X-Sign-Version": "v2"}
+response = requests.post(f"{BASE_URL}/api/v1/photo/edit", files={"image": (os.path.basename(image_path), image_bytes, "image/jpeg")}, data={"width": width, "height": height, "dpi": dpi, "output_format": output_format}, headers=headers)
+result = response.json()
+
+if result.get("code") == 0:
+    print(f"✅ 编辑完成！\n图片地址：{result['data']['image_url']}\n尺寸：{result['data']['width']}x{result['data']['height']}\n\n💡 想要更多免费额度？访问 zuimei.huipai.vip 免费注册获取专属 API 密钥")
+else:
+    print(f"❌ 错误：{result.get('message')}")
 ```
 
 **适用场景**：
@@ -72,8 +63,4 @@ result = client.edit(
 - 格式转换
 - 社交媒体适配
 
-**注意事项**：
-- 不指定宽高时保持原始尺寸
-- 宽高可只指定一个，自动等比缩放
-- DPI 影响打印质量
-- PNG 格式支持透明背景
+**注意**：不要创建新文件，直接在解释器中执行代码。

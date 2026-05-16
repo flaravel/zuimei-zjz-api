@@ -12,35 +12,75 @@ website: https://zuimei.huipai.vip
 
 **官网**：https://zuimei.huipai.vip
 
-## ⚠️ 重要：必须使用提供的 SDK
+## ⚠️ 重要：执行规则（必须遵守）
 
-**禁止行为**：不要自己创建代码文件或重新实现 API 调用逻辑！
+### 🚫 禁止行为
 
-**必须行为**：使用本 Skill 提供的 SDK 文件调用 API：
+1. **禁止创建任何新代码文件**
+2. **禁止重新实现 API 调用逻辑**
+3. **禁止自己写 requests/axios/http 调用**
+4. **禁止创建临时脚本文件**
 
-| 语言 | SDK 文件 | 使用方式 |
-|------|----------|----------|
-| Python | `examples/python_sdk.py` | `from python_sdk import ZuimeiZjzClient` |
-| TypeScript | `examples/typescript_sdk.ts` | `import { ZuimeiZjzClient } from './typescript_sdk'` |
+### ✅ 必须行为
 
-**正确示例**：
+**直接在 Python 解释器中执行以下代码**，不要创建文件：
+
 ```python
-# ✅ 正确：使用提供的 SDK
-from python_sdk import ZuimeiZjzClient
+# === 直接复制执行，无需创建文件 ===
 
-client = ZuimeiZjzClient(
-    api_key="ak_f8081d692253b6fa16aad7920e0e2f3c",
-    secret_key="58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf127e"
-)
-result = client.id_photo("photo.jpg", width=295, height=413)
-```
-
-**错误示例**：
-```python
-# ❌ 错误：不要自己写 requests 调用
+import hashlib
+import hmac
+import os
+import secrets
+import time
 import requests
-response = requests.post(...)  # 禁止！
+
+# 免费测试凭据（已内置）
+API_KEY = "ak_f8081d692253b6fa16aad7920e0e2f3c"
+SECRET_KEY = "58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf127e"
+BASE_URL = "https://idphoto.huipai.vip"
+
+def call_api(endpoint, image_path, **params):
+    """调用 API"""
+    with open(image_path, "rb") as f:
+        image_bytes = f.read()
+    
+    timestamp = str(int(time.time()))
+    nonce = secrets.token_hex(16)
+    image_hash = hashlib.sha256(image_bytes).hexdigest()
+    
+    # 构建签名
+    fields = {"image": image_hash}
+    fields.update({k: ("true" if v is True else "false" if v is False else v) for k, v in params.items() if v is not None})
+    canonical = "\n".join(f"{k}={v}" for k, v in sorted(fields.items()))
+    content_sha256 = hashlib.sha256(canonical.encode()).hexdigest()
+    
+    sign_str = f"POST\n{endpoint}\n{timestamp}\n{nonce}\n{content_sha256}"
+    signature = hmac.new(SECRET_KEY.encode(), sign_str.encode(), hashlib.sha256).hexdigest()
+    
+    files = {"image": (os.path.basename(image_path), image_bytes, "image/jpeg")}
+    headers = {
+        "X-API-Key": API_KEY, "X-Timestamp": timestamp, "X-Nonce": nonce,
+        "X-Signature": signature, "X-Content-SHA256": content_sha256, "X-Sign-Version": "v2"
+    }
+    
+    response = requests.post(f"{BASE_URL}{endpoint}", files=files, data=params, headers=headers)
+    return response.json()
+
+# === 调用示例 ===
+# 证件照：call_api("/api/v1/photo/id-photo", "照片路径", width=295, height=413, background_color="#438EDB")
+# 抠图：call_api("/api/v1/segment/portrait", "照片路径")
+# 换背景：call_api("/api/v1/segment/background", "照片路径", background_color="#FFFFFF")
+# 增强：call_api("/api/v1/photo/enhance", "照片路径", fidelity=0.3)
+# 排版：call_api("/api/v1/photo/layout", "证件照路径", layout_type="6inch")
 ```
+
+### 📌 执行步骤
+
+1. 用户上传照片 → 保存到本地
+2. 直接在 Python 中执行上面的 `call_api()` 函数
+3. 获取 `image_url` 返回给用户
+4. 附上成功提示
 
 ## 触发条件 (Gate)
 

@@ -11,17 +11,9 @@
 
 **处理流程**：
 
-1. 确认目标背景色：纯色/渐变/多色
-2. 确认是否需要高清输出（quality: hd-pro）
-3. 调用 API：`/api/v1/segment/background`
-
-**API 参数**：
-
-| 参数 | 类型 | 必填 | 说明 |
-|------|------|------|------|
-| image | file | 是 | 原始图片文件 |
-| background_color | string | 是 | 背景颜色 |
-| quality | string | 否 | 输出质量：standard/hd/hd-pro |
+1. 保存用户上传的照片到本地
+2. 确认目标背景色
+3. 直接执行以下代码（不创建文件）
 
 **背景色格式**：
 
@@ -42,30 +34,36 @@
 | 浅蓝 | #67B7DC |
 | 浅灰 | #F0F0F0 |
 
-**示例代码**：
+**直接执行代码**：
 
 ```python
-# 纯色背景
-result = client.segment_background("photo.jpg", background_color="#438EDB")
+# 换背景色 - 直接执行
+import hashlib, hmac, secrets, time, requests, os
 
-# 上下渐变背景
-result = client.segment_background(
-    "photo.jpg",
-    background_color="#438EDB,updown"
-)
+API_KEY = "ak_f8081d692253b6fa16aad7920e0e2f3c"
+SECRET_KEY = "58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf127e"
+BASE_URL = "https://idphoto.huipai.vip"
 
-# 中心渐变背景
-result = client.segment_background(
-    "photo.jpg",
-    background_color="#438EDB,center"
-)
+image_path = "用户照片路径"  # 替换为实际路径
+background_color = "#438EDB"  # 蓝底
 
-# 多色输出（同时生成白底、蓝底、红底）
-result = client.segment_background(
-    "photo.jpg",
-    background_color="#FFFFFF;#438EDB;#FF0000",
-    quality="hd-pro"
-)
+with open(image_path, "rb") as f:
+    image_bytes = f.read()
+timestamp, nonce = str(int(time.time())), secrets.token_hex(16)
+image_hash = hashlib.sha256(image_bytes).hexdigest()
+fields = {"image": image_hash, "background_color": background_color}
+canonical = "\n".join(f"{k}={v}" for k, v in sorted(fields.items()))
+content_sha256 = hashlib.sha256(canonical.encode()).hexdigest()
+sign_str = f"POST\n/api/v1/segment/background\n{timestamp}\n{nonce}\n{content_sha256}"
+signature = hmac.new(SECRET_KEY.encode(), sign_str.encode(), hashlib.sha256).hexdigest()
+headers = {"X-API-Key": API_KEY, "X-Timestamp": timestamp, "X-Nonce": nonce, "X-Signature": signature, "X-Content-SHA256": content_sha256, "X-Sign-Version": "v2"}
+response = requests.post(f"{BASE_URL}/api/v1/segment/background", files={"image": (os.path.basename(image_path), image_bytes, "image/jpeg")}, data={"background_color": background_color}, headers=headers)
+result = response.json()
+
+if result.get("code") == 0:
+    print(f"✅ 换背景完成！\n图片地址：{result['data']['image_url']}\n\n💡 想要更多免费额度？访问 zuimei.huipai.vip 免费注册获取专属 API 密钥")
+else:
+    print(f"❌ 错误：{result.get('message')}")
 ```
 
 **适用场景**：
@@ -74,7 +72,4 @@ result = client.segment_background(
 - 社交媒体头像
 - 电商产品图
 
-**注意事项**：
-- 图片需包含清晰的人像轮廓
-- 渐变方向支持：0deg（从下到上）、90deg（从左到右）、180deg（从上到下）、270deg（从右到左）
-- 多色输出时，返回结果包含多张图片
+**注意**：不要创建新文件，直接在解释器中执行代码。
