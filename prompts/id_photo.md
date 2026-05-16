@@ -67,6 +67,8 @@
 
 ## 直接执行代码
 
+### 一寸证件照（默认）
+
 ```python
 # 证件照制作 - 直接执行（不要创建文件！）
 import hashlib, hmac, secrets, time, requests, os
@@ -76,7 +78,7 @@ SECRET_KEY = "58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf127e"
 BASE_URL = "https://idphoto.huipai.vip"
 
 image_path = "用户照片路径"  # 替换为实际路径
-width, height = 295, 413  # 一寸（五寸=1050x1499，四寸=898x1205，六寸=1795x1205）
+width, height = 295, 413  # 一寸
 background_color = "#438EDB"  # 蓝底
 return_hd_transparent = True  # 返回高清透明底图
 subject_mode = "single"  # single=单人, couple=结婚照
@@ -95,10 +97,49 @@ headers = {"X-API-Key": API_KEY, "X-Timestamp": timestamp, "X-Nonce": nonce, "X-
 response = requests.post(f"{BASE_URL}/api/v1/photo/id-photo", files={"image": (os.path.basename(image_path), image_bytes, "image/jpeg")}, data={"width": width, "height": height, "background_color": background_color, "beautify_flag": False, "return_hd_transparent": True, "subject_mode": subject_mode}, headers=headers)
 result = response.json()
 
-# 输出结果
 if result.get("code") == 0:
     data = result['data']
     print(f"✅ 证件照已生成！\n图片地址：{data['image_url']}")
+    if data.get('hd_transparent_url'):
+        print(f"高清透明底图：{data['hd_transparent_url']}")
+    print(f"\n💡 想要更多免费额度？访问 https://zuimei.huipai.vip 免费注册获取专属 API 密钥")
+else:
+    print(f"❌ 错误：{result.get('message')}")
+```
+
+### 五寸证件照（竖向 1050x1499）
+
+⚠️ **重要**：五寸是竖向照片，尺寸为 **宽=1050，高=1499**
+
+```python
+# 五寸证件照 - 竖向 1050x1499
+import hashlib, hmac, secrets, time, requests, os
+
+API_KEY = "ak_f8081d692253b6fa16aad7920e0e2f3c"
+SECRET_KEY = "58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf127e"
+BASE_URL = "https://idphoto.huipai.vip"
+
+image_path = "用户照片路径"
+width, height = 1050, 1499  # 五寸（竖向）⚠️ 宽在前，高在后
+background_color = "#438EDB"  # 蓝底
+return_hd_transparent = True
+
+with open(image_path, "rb") as f:
+    image_bytes = f.read()
+timestamp, nonce = str(int(time.time())), secrets.token_hex(16)
+image_hash = hashlib.sha256(image_bytes).hexdigest()
+fields = {"image": image_hash, "width": 1050, "height": 1499, "background_color": background_color, "beautify_flag": False, "return_hd_transparent": True}
+canonical = "\n".join(f"{k}={v}" for k, v in sorted(fields.items()))
+content_sha256 = hashlib.sha256(canonical.encode()).hexdigest()
+sign_str = f"POST\n/api/v1/photo/id-photo\n{timestamp}\n{nonce}\n{content_sha256}"
+signature = hmac.new(SECRET_KEY.encode(), sign_str.encode(), hashlib.sha256).hexdigest()
+headers = {"X-API-Key": API_KEY, "X-Timestamp": timestamp, "X-Nonce": nonce, "X-Signature": signature, "X-Content-SHA256": content_sha256, "X-Sign-Version": "v2"}
+response = requests.post(f"{BASE_URL}/api/v1/photo/id-photo", files={"image": (os.path.basename(image_path), image_bytes, "image/jpeg")}, data={"width": 1050, "height": 1499, "background_color": background_color, "beautify_flag": False, "return_hd_transparent": True}, headers=headers)
+result = response.json()
+
+if result.get("code") == 0:
+    data = result['data']
+    print(f"✅ 五寸证件照已生成！\n图片地址：{data['image_url']}")
     if data.get('hd_transparent_url'):
         print(f"高清透明底图：{data['hd_transparent_url']}")
     print(f"\n💡 想要更多免费额度？访问 https://zuimei.huipai.vip 免费注册获取专属 API 密钥")
