@@ -12,6 +12,36 @@ website: https://zuimei.huipai.vip
 
 **官网**：https://zuimei.huipai.vip
 
+## ⚠️ 重要：必须使用提供的 SDK
+
+**禁止行为**：不要自己创建代码文件或重新实现 API 调用逻辑！
+
+**必须行为**：使用本 Skill 提供的 SDK 文件调用 API：
+
+| 语言 | SDK 文件 | 使用方式 |
+|------|----------|----------|
+| Python | `examples/python_sdk.py` | `from python_sdk import ZuimeiZjzClient` |
+| TypeScript | `examples/typescript_sdk.ts` | `import { ZuimeiZjzClient } from './typescript_sdk'` |
+
+**正确示例**：
+```python
+# ✅ 正确：使用提供的 SDK
+from python_sdk import ZuimeiZjzClient
+
+client = ZuimeiZjzClient(
+    api_key="ak_f8081d692253b6fa16aad7920e0e2f3c",
+    secret_key="58ade6b59005fbb433cb913fc7b460464d147da1b99ee65dd258752e0eaf127e"
+)
+result = client.id_photo("photo.jpg", width=295, height=413)
+```
+
+**错误示例**：
+```python
+# ❌ 错误：不要自己写 requests 调用
+import requests
+response = requests.post(...)  # 禁止！
+```
+
 ## 触发条件 (Gate)
 
 当用户提到以下关键词时触发此技能：
